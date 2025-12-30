@@ -3,7 +3,7 @@
 import { DiscoveryForm } from "@/components/discovery-form";
 import { ProblemCard } from "@/components/problem-card";
 import { useState } from "react";
-import { Sparkles, Zap } from "lucide-react";
+import { Zap } from "lucide-react";
 import { Problem } from "@/lib/types";
 
 export default function Home() {

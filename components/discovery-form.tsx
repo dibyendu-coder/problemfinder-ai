@@ -18,7 +18,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useState } from "react"
 import { generateProblems } from "@/app/actions"
 import { Loader2, Sparkles } from "lucide-react"
-import { DiscoveryFormData, DifficultyLevel, GoalType } from "@/lib/types"
+import { Problem } from "@/lib/types"
 
 const formSchema = z.object({
   skills: z.string().min(2, {
@@ -31,7 +31,7 @@ const formSchema = z.object({
   goal: z.enum(["Resume", "Startup", "Learning"]),
 })
 
-export function DiscoveryForm({ onResults }: { onResults: (data: any) => void }) {
+export function DiscoveryForm({ onResults }: { onResults: (data: Problem[]) => void }) {
   const [isLoading, setIsLoading] = useState(false)
 
   const form = useForm<z.infer<typeof formSchema>>({
