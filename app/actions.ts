@@ -1,12 +1,14 @@
 "use server"
 
-export async function generateProblems(data: any) {
+import { DiscoveryFormData, Problem } from "@/lib/types";
+
+export async function generateProblems(data: DiscoveryFormData): Promise<Problem[]> {
     // Mock delay
     await new Promise((resolve) => setTimeout(resolve, 1500))
 
     // Mock response based on input
     // In a real app, this would call Gemini/OpenAI
-    const problems = [
+    const problems: Problem[] = [
         // --- BEGINNER PROJECTS (20) ---
         {
             title: "Personal Budget Tracker",
@@ -674,7 +676,7 @@ export async function generateProblems(data: any) {
         }
     ]
 
-    if (data.difficulty && data.difficulty !== "") {
+    if (data.difficulty) {
         return problems.filter(p => p.difficulty === data.difficulty)
     }
 

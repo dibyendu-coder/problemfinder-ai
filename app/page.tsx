@@ -4,9 +4,10 @@ import { DiscoveryForm } from "@/components/discovery-form";
 import { ProblemCard } from "@/components/problem-card";
 import { useState } from "react";
 import { Sparkles, Zap } from "lucide-react";
+import { Problem } from "@/lib/types";
 
 export default function Home() {
-  const [problems, setProblems] = useState<any[] | null>(null);
+  const [problems, setProblems] = useState<Problem[] | null>(null);
 
   return (
     <main className="min-h-screen relative overflow-hidden">

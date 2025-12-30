@@ -1,19 +1,10 @@
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, Code, Users, Lightbulb, TrendingUp, CheckCircle, AlertCircle, HelpCircle } from "lucide-react"
+import { Problem } from "@/lib/types"
 
 interface ProblemCardProps {
-    problem: {
-        title: string
-        rationale: string
-        targetUser: string
-        solution: string
-        techStack: string
-        features: string[]
-        difficulty: string
-        realWorldImpact: string
-        validationStatus: string
-    }
+    problem: Problem
 }
 
 export function ProblemCard({ problem }: ProblemCardProps) {
