@@ -17,7 +17,7 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useState } from "react"
 import { generateProblems } from "@/app/actions"
-import { Loader2 } from "lucide-react"
+import { Loader2, Sparkles } from "lucide-react"
 
 const formSchema = z.object({
   skills: z.string().min(2, {
@@ -57,88 +57,103 @@ export function DiscoveryForm({ onResults }: { onResults: (data: any) => void })
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 w-full max-w-md mx-auto p-6 bg-card rounded-xl border shadow-sm">
-        <FormField
-          control={form.control}
-          name="skills"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Skills</FormLabel>
-              <FormControl>
-                <Input placeholder="React, Node.js, Python..." {...field} />
-              </FormControl>
-              <FormDescription>
-                Technologies you know or want to use.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="interests"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Interests</FormLabel>
-              <FormControl>
-                <Input placeholder="Finance, Health, Gaming..." {...field} />
-              </FormControl>
-              <FormDescription>
-                Topics you are passionate about.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
+        <div className="space-y-6">
           <FormField
             control={form.control}
-            name="difficulty"
+            name="skills"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Difficulty</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select difficulty" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="Beginner">Beginner</SelectItem>
-                    <SelectItem value="Intermediate">Intermediate</SelectItem>
-                    <SelectItem value="Advanced">Advanced</SelectItem>
-                  </SelectContent>
-                </Select>
+                <FormLabel className="text-white/80 font-heading tracking-wide">Your Arsenal</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="e.g. React, Python, PostgreSQL..."
+                    {...field}
+                    className="bg-black/20 border-white/10 text-white placeholder:text-white/30 focus-visible:ring-primary focus-visible:border-primary/50 h-12"
+                  />
+                </FormControl>
+                <FormDescription className="text-xs text-white/50">
+                  Languages, frameworks, or tools you want to leverage.
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
           <FormField
             control={form.control}
-            name="goal"
+            name="interests"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Goal</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select goal" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="Resume">Resume</SelectItem>
-                    <SelectItem value="Startup">Startup</SelectItem>
-                    <SelectItem value="Learning">Learning</SelectItem>
-                  </SelectContent>
-                </Select>
+                <FormLabel className="text-white/80 font-heading tracking-wide">Target Sector</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="e.g. FinTech, Healthcare, Gaming..."
+                    {...field}
+                    className="bg-black/20 border-white/10 text-white placeholder:text-white/30 focus-visible:ring-secondary focus-visible:border-secondary/50 h-12"
+                  />
+                </FormControl>
+                <FormDescription className="text-xs text-white/50">
+                  Industries that fascinate you.
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <FormField
+              control={form.control}
+              name="difficulty"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-white/80 font-heading tracking-wide">Complexity</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="bg-black/20 border-white/10 text-white focus:ring-primary h-12">
+                        <SelectValue placeholder="Select difficulty" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent className="bg-[#05051a] border-white/10 text-white">
+                      <SelectItem value="Beginner" className="focus:bg-primary/20 focus:text-white">Beginner</SelectItem>
+                      <SelectItem value="Intermediate" className="focus:bg-primary/20 focus:text-white">Intermediate</SelectItem>
+                      <SelectItem value="Advanced" className="focus:bg-primary/20 focus:text-white">Advanced</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="goal"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-white/80 font-heading tracking-wide">Objective</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="bg-black/20 border-white/10 text-white focus:ring-secondary h-12">
+                        <SelectValue placeholder="Select goal" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent className="bg-[#05051a] border-white/10 text-white">
+                      <SelectItem value="Resume" className="focus:bg-secondary/20 focus:text-white">Resume Booster</SelectItem>
+                      <SelectItem value="Startup" className="focus:bg-secondary/20 focus:text-white">Startup MVP</SelectItem>
+                      <SelectItem value="Learning" className="focus:bg-secondary/20 focus:text-white">Deep Learning</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
         </div>
-        <Button type="submit" className="w-full" disabled={isLoading}>
-          {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-          Generate Ideas
+
+        <Button
+          type="submit"
+          className="w-full h-12 text-lg font-bold bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90 text-white shadow-lg shadow-primary/25 border-none transition-all duration-300 hover:scale-[1.01] hover:shadow-primary/40"
+          disabled={isLoading}
+        >
+          {isLoading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Sparkles className="mr-2 h-5 w-5 fill-white/20" />}
+          Generate Concepts
         </Button>
       </form>
     </Form>
