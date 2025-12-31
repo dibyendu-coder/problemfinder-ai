@@ -97,12 +97,7 @@ export function ProblemCard({ problem }: ProblemCardProps) {
                 </div>
 
                 {/* Footer / CTA */}
-                <div className="mt-8 pt-6 border-t border-white/5">
-                    <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-[0_0_20px_-5px_var(--color-primary)] hover:shadow-[0_0_30px_-5px_var(--color-primary)] transition-all duration-300 group/btn">
-                        Start Building This Project
-                        <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
-                    </Button>
-                </div>
+
             </div>
         </div>
     )
