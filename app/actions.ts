@@ -2,6 +2,67 @@
 
 import { DiscoveryFormData, Problem } from "@/lib/types";
 
+// Helper function to calculate relevance score
+function calculateRelevanceScore(problem: Problem, data: DiscoveryFormData): number {
+    let score = 0;
+
+    // Normalize inputs to lowercase for matching
+    const skills = data.skills.toLowerCase();
+    const interests = data.interests.toLowerCase();
+    const goal = data.goal;
+
+    // Split into keywords
+    const skillKeywords = skills.split(/[\s,]+/).filter(k => k.length > 2);
+    const interestKeywords = interests.split(/[\s,]+/).filter(k => k.length > 2);
+
+    // 1. INTERESTS MATCHING (Target Sector) - Highest weight
+    const searchableText = [
+        problem.title,
+        problem.rationale,
+        problem.solution,
+        problem.targetUser,
+        problem.realWorldImpact
+    ].join(' ').toLowerCase();
+
+    interestKeywords.forEach(keyword => {
+        if (searchableText.includes(keyword)) {
+            score += 10;
+        }
+    });
+
+    // 2. SKILLS MATCHING (Arsenal) - Medium weight
+    const techStack = problem.techStack.toLowerCase();
+    skillKeywords.forEach(keyword => {
+        if (techStack.includes(keyword)) {
+            score += 5;
+        }
+    });
+
+    // 3. GOAL MATCHING (Objective) - Bonus points
+    if (goal === "Startup") {
+        // Boost unvalidated or needs research projects (more opportunity)
+        if (problem.validationStatus === "Unvalidated" || problem.validationStatus === "Needs More Research") {
+            score += 3;
+        }
+    } else if (goal === "Resume") {
+        // Boost validated projects with recognizable tech
+        if (problem.validationStatus === "Validated") {
+            score += 3;
+        }
+        // Boost if uses popular tech
+        if (techStack.match(/react|node|python|typescript|next\.js|firebase/)) {
+            score += 2;
+        }
+    } else if (goal === "Learning") {
+        // Boost projects that match skills but also introduce new tech
+        if (skillKeywords.some(k => techStack.includes(k))) {
+            score += 2;
+        }
+    }
+
+    return score;
+}
+
 export async function generateProblems(data: DiscoveryFormData): Promise<Problem[]> {
     // Mock delay
     await new Promise((resolve) => setTimeout(resolve, 1500))
@@ -676,9 +737,29 @@ export async function generateProblems(data: DiscoveryFormData): Promise<Problem
         }
     ]
 
-    if (data.difficulty) {
-        return problems.filter(p => p.difficulty === data.difficulty)
-    }
+    // 1. Filter by difficulty first (hard requirement)
+    let filteredProblems = data.difficulty
+        ? problems.filter(p => p.difficulty === data.difficulty)
+        : problems;
 
-    return problems
+    // 2. Calculate relevance scores for each problem
+    const scoredProblems = filteredProblems.map(problem => ({
+        problem,
+        score: calculateRelevanceScore(problem, data)
+    }));
+
+    // 3. Sort by score (descending)
+    scoredProblems.sort((a, b) => b.score - a.score);
+
+    // 4. Return top results (6-9 projects)
+    const topProblems = scoredProblems.slice(0, 9).map(sp => sp.problem);
+
+    // 5. Fallback: if no good matches (all scores are 0), return random selection
+    if (topProblems.length > 0 && scoredProblems[0].score > 0) {
+        return topProblems;
+    } else {
+        // Random fallback within difficulty
+        const shuffled = [...filteredProblems].sort(() => Math.random() - 0.5);
+        return shuffled.slice(0, 9);
+    }
 }
